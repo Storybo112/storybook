@@ -15,8 +15,9 @@
     props = {},
     /** @type {{[string]: () => {}}} Attach svelte event handlers */
     on,
-    /** @type {any} whether this level of the decorator chain is the last, ie. the actual story */
     argTypes,
+    /** @type {boolean} whether this level of the decorator chain is the last, ie. the actual story */
+    isOriginalStory,
   } = storyFn();
 
   let firstTime = true;
@@ -32,13 +33,14 @@
         props,
         on,
         argTypes,
+        isOriginalStory,
       };
     }
     return storyFn();
   }
 
   // reactive, re-render on storyFn change
-  $: ({ Component, props = {}, on, argTypes } = getStoryFnValue(storyFn));
+  $: ({ Component, props = {}, on, argTypes, isOriginalStory } = getStoryFnValue(storyFn));
 
   // set the argTypes context, read by the last SlotDecorator that renders the original story
   if (!Component) {
@@ -53,4 +55,4 @@
   }
 </script>
 
-<SlotDecorator {Component} {props} {on} {argTypes} />
+<SlotDecorator {Component} {props} {on} {argTypes} {isOriginalStory} />

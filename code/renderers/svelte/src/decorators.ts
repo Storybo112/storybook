@@ -70,7 +70,7 @@ function prepareStory(
   }
 
   // no innerStory means this is the last story in the decorator chain, so it should create events from argTypes
-  return { ...preparedStory, argTypes: context.argTypes };
+  return { ...preparedStory, argTypes: context.argTypes, isOriginalStory: true };
 }
 
 export function decorateStory(storyFn: any, decorators: any[]) {
