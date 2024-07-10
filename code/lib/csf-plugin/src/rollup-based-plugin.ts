@@ -6,7 +6,7 @@ import { STORIES_REGEX } from './constants';
 
 const logger = console;
 
-export function rollupBasedPlugin(options: EnrichCsfOptions): Partial<RollupPlugin<any>> {
+export function rollupBasedPlugin(options: EnrichCsfOptions): Partial<RollupPlugin> {
   return {
     name: 'plugin-csf',
     async transform(code, id) {

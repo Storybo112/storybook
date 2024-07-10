@@ -30,7 +30,7 @@ interface PortOptions {
   exactPort?: boolean;
 }
 
-export const getServerPort = (port?: number, { exactPort }: PortOptions = {}) =>
+export const getServerPort = (port: number, { exactPort }: PortOptions = {}) =>
   detectFreePort(port)
     .then((freePort) => {
       if (freePort !== port && exactPort) {
