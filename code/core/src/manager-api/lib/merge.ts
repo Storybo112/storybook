@@ -1,23 +1,19 @@
-import mergeWith from 'lodash/mergeWith.js';
-import isEqual from 'lodash/isEqual.js';
+import { defu, defuArrayFn } from 'defu';
 
 import { logger } from '@storybook/core/client-logger';
 
-export default <TObj = any>(a: TObj, b: Partial<TObj>) =>
-  mergeWith({}, a, b, (objValue: TObj, srcValue: Partial<TObj>) => {
-    if (Array.isArray(srcValue) && Array.isArray(objValue)) {
-      srcValue.forEach((s) => {
-        const existing = objValue.find((o) => o === s || isEqual(o, s));
-        if (!existing) {
-          objValue.push(s);
-        }
-      });
+export default <TObj = any>(a: TObj, b: Partial<TObj> & any) => {
+  if (Array.isArray(a)) {
+    if (Array.isArray(b)) {
+      return defuArrayFn(a, b);
+    }
 
-      return objValue;
-    }
-    if (Array.isArray(objValue)) {
-      logger.log(['the types mismatch, picking', objValue]);
-      return objValue;
-    }
-    return undefined;
-  });
+    logger.log(['the types mismatch, picking', a]);
+    return a;
+  }
+
+  // TODO: Ask for what is prefered:
+  // 1. type guard (safe at runtime, but potential performance slow-down)
+  // 2. or type assertion (unsafe at runtime)
+  return defu(a as object, b);
+};

@@ -2,7 +2,6 @@
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import { global } from '@storybook/global';
-import merge from 'lodash/merge.js';
 import {
   CONFIG_ERROR,
   CURRENT_STORY_WAS_SET,
@@ -29,9 +28,10 @@ import {
   DOCS_PREPARED,
 } from '@storybook/core/core-events';
 import { logger } from '@storybook/core/client-logger';
+import { merge } from '@storybook/core/manager-api';
 import type { Renderer, ModuleImportFn, ProjectAnnotations } from '@storybook/core/types';
-import { addons } from '../addons';
 
+import { addons } from '../addons';
 import { PreviewWeb } from './PreviewWeb';
 import {
   componentOneExports,
@@ -52,6 +52,7 @@ import {
 } from './PreviewWeb.mockdata';
 import { WebView } from './WebView';
 import type { StoryStore } from '../store';
+import { title } from 'process';
 
 const { history, document } = global;
 
@@ -82,7 +83,7 @@ const serializeError = (error: Error) => {
 };
 
 const createGate = (): [Promise<any | undefined>, (_?: any) => void] => {
-  let openGate = (_?: any) => {};
+  let openGate = (_?: any) => { };
   const gate = new Promise<any | undefined>((resolve) => {
     openGate = resolve;
   });
@@ -301,7 +302,7 @@ describe('PreviewWeb', () => {
         expect(mockChannel.emit).toHaveBeenCalledWith(STORY_MISSING, 'component-one--missing');
 
         mockChannel.emit.mockClear();
-        const newComponentOneExports = merge({}, componentOneExports, {
+        const newComponentOneExports = merge(componentOneExports, {
           d: { args: { foo: 'd' }, play: vi.fn() },
         });
         const newImportFn = vi.fn(async (path) => {
@@ -355,7 +356,7 @@ describe('PreviewWeb', () => {
           });
           await waitForSetCurrentStory();
 
-          const newComponentOneExports = merge({}, componentOneExports, {
+          const newComponentOneExports = merge(componentOneExports, {
             d: { args: { foo: 'd' }, play: vi.fn() },
           });
           const newImportFn = vi.fn(async (path) => {
@@ -2776,7 +2777,7 @@ describe('PreviewWeb', () => {
     });
 
     describe('when the current story changes', () => {
-      const newComponentOneExports = merge({}, componentOneExports, {
+      const newComponentOneExports = merge(componentOneExports, {
         a: { args: { foo: 'edited' } },
       });
       const newImportFn = vi.fn(async (path) => {
@@ -3131,7 +3132,7 @@ describe('PreviewWeb', () => {
       afterEach(() => {
         vi.useRealTimers();
       });
-      const newComponentOneExports = merge({}, componentOneExports, {
+      const newComponentOneExports = merge(componentOneExports, {
         a: { args: { bar: 'edited' }, argTypes: { bar: { type: { name: 'string' } } } },
       });
       const newImportFn = vi.fn(async (path) => {
