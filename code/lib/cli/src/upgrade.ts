@@ -229,18 +229,7 @@ export const doUpgrade = async ({
         // only upgrade packages that are in the monorepo
         return dependency in versions;
       }) as Array<keyof typeof versions>;
-      return monorepoDependencies.map((dependency) => {
-        let char = '^';
-        if (isCLIOutdated) {
-          char = '';
-        }
-        if (isCanary) {
-          char = '';
-        }
-        /* add ^ modifier to the version if this is the latest stable or prerelease version
-           example outputs: @storybook/react@^8.0.0 */
-        return `${dependency}@${char}${versions[dependency]}`;
-      });
+      return monorepoDependencies.map((dependency) => `${dependency}@${versions[dependency]}`);
     };
 
     const upgradedDependencies = toUpgradedDependencies(packageJson.dependencies);
@@ -249,17 +238,16 @@ export const doUpgrade = async ({
     logger.info(`Updating dependencies in ${chalk.cyan('package.json')}..`);
     if (upgradedDependencies.length > 0) {
       await packageManager.addDependencies(
-        { installAsDevDependencies: false, skipInstall: true, packageJson },
+        { installAsDevDependencies: false, packageJson },
         upgradedDependencies
       );
     }
     if (upgradedDevDependencies.length > 0) {
       await packageManager.addDependencies(
-        { installAsDevDependencies: true, skipInstall: true, packageJson },
+        { installAsDevDependencies: true, packageJson },
         upgradedDevDependencies
       );
     }
-    await packageManager.installDependencies();
   }
 
   // AUTOMIGRATIONS
