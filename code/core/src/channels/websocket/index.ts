@@ -1,22 +1,28 @@
 /// <reference path="../../typings.d.ts" />
 
 import { global } from '@storybook/global';
+import { pretty } from '@storybook/core/client-logger';
 import { isJSON, parse, stringify } from 'telejson';
 import invariant from 'tiny-invariant';
 
 import * as EVENTS from '@storybook/core/core-events';
-import type { ChannelTransport, ChannelHandler, Config } from '../types';
+import type { ChannelTransport, ChannelHandler, Config, ChannelBrowserPage } from '../types';
+
+import { formatChannelPage, formatEventType } from '../formatChannelEvent';
 
 const { WebSocket } = global;
 
 type OnError = (message: Event) => void;
 
 interface WebsocketTransportArgs extends Partial<Config> {
+  page: ChannelBrowserPage;
   url: string;
   onError: OnError;
 }
 
 export class WebsocketTransport implements ChannelTransport {
+  private page: ChannelBrowserPage;
+
   private buffer: string[] = [];
 
   private handler?: ChannelHandler;
@@ -26,16 +32,13 @@ export class WebsocketTransport implements ChannelTransport {
   private isReady = false;
 
   constructor({ url, onError, page }: WebsocketTransportArgs) {
+    this.page = page;
     this.socket = new WebSocket(url);
     this.socket.onopen = () => {
       this.isReady = true;
       this.flush();
     };
-    this.socket.onmessage = ({ data }) => {
-      const event = typeof data === 'string' && isJSON(data) ? parse(data) : data;
-      invariant(this.handler, 'WebsocketTransport handler should be set');
-      this.handler(event);
-    };
+    this.socket.onmessage = this.handleEvent.bind(this);
     this.socket.onerror = (e) => {
       if (onError) {
         onError(e);
@@ -76,5 +79,17 @@ export class WebsocketTransport implements ChannelTransport {
     const { buffer } = this;
     this.buffer = [];
     buffer.forEach((event) => this.send(event));
+  }
+
+  private handleEvent({ data }: MessageEvent) {
+    const event = typeof data === 'string' && isJSON(data) ? parse(data) : data;
+    const pageString = formatChannelPage(this.page);
+    const eventString = formatEventType(event.type);
+    const message = `${pageString} 
+    received ${eventString} 
+    (${data.length})`;
+    pretty.debug(message, ...event.args);
+    invariant(this.handler, 'WebsocketTransport handler should be set');
+    this.handler(event);
   }
 }
