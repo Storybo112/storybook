@@ -1,5 +1,9 @@
 {
   "extends": "../../tsconfig.json",
-  "compilerOptions": {},
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment"
+  },
   "include": ["src/**/*", "template/**/*"]
 }
