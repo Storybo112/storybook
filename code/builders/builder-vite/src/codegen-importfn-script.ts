@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import type { Options } from 'storybook/internal/types';
+import type { Options } from '@storybook/types';
 
 import { listStories } from './list-stories';
 
@@ -14,7 +14,7 @@ import { listStories } from './list-stories';
  * We want to deal in importPaths relative to the working dir, so we normalize
  */
 function toImportPath(relativePath: string) {
-  return relativePath.startsWith('../') ? relativePath : `./${relativePath}`;
+  return /\.\.\/|virtual:/.test(relativePath) ? relativePath : `./${relativePath}`;
 }
 
 /**
@@ -38,9 +38,17 @@ async function toImportFn(stories: string[]) {
     };
 
     export async function importFn(path) {
-        return importers[path]();
+      if (/^virtual:/.test(path)) {
+        return import(/* @vite-ignore */ '/' + path);
+      }
+
+      if (!(path in importers)) {
+        throw new Error(\`Storybook generated import script does no have an importer for "\${path}". Existing importers: \${Object.keys(importers)}\`);
+      }
+
+      return importers[path]();
     }
-  `;
+`;
 }
 
 export async function generateImportFnScriptCode(options: Options) {
