@@ -56,14 +56,14 @@ interface PresetOptions {
   viewport?: boolean;
 }
 
-const requireMain = (configDir: string) => {
+const requireMain = async (configDir: string) => {
   const absoluteConfigDir = isAbsolute(configDir) ? configDir : join(process.cwd(), configDir);
   const mainFile = join(absoluteConfigDir, 'main');
 
   return serverRequire(mainFile) ?? {};
 };
 
-export function addons(options: PresetOptions) {
+export async function addons(options: PresetOptions) {
   const checkInstalled = (addonName: string, main: any) => {
     const addon = `@storybook/addon-${addonName}`;
     const existingAddon = main.addons?.find((entry: string | { name: string }) => {
@@ -76,7 +76,7 @@ export function addons(options: PresetOptions) {
     return !!existingAddon;
   };
 
-  const main = requireMain(options.configDir);
+  const main = await requireMain(options.configDir);
 
   // NOTE: The order of these addons is important.
   return [

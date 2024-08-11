@@ -10,6 +10,7 @@
     "emitDecoratorMetadata": true,
     "declaration": true,
     "outDir": "dist",
+    "moduleResolution": "Bundler",
     "types": ["node"],
     "skipLibCheck": true,
     "resolveJsonModule": true,

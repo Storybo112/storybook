@@ -42,7 +42,7 @@ export const getVirtualModules = async (options: Options) => {
         return slash(entry);
       }
     ),
-    loadPreviewOrConfigFile(options),
+    await loadPreviewOrConfigFile(options),
   ].filter(Boolean);
 
   const storiesFilename = 'storybook-stories.js';

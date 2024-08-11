@@ -17,7 +17,7 @@ export async function loadMainConfig({
 }): Promise<StorybookConfig> {
   await validateConfigurationFiles(configDir);
 
-  const mainJsPath = serverResolve(resolve(configDir, 'main')) as string;
+  const mainJsPath = (await serverResolve(resolve(configDir, 'main'))) as string;
 
   if (noCache && mainJsPath && require.cache[mainJsPath]) {
     delete require.cache[mainJsPath];

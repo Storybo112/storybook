@@ -15,6 +15,7 @@ import type {
 import { logger } from '@storybook/core/node-logger';
 import { CriticalPresetLoadError } from '@storybook/core/server-errors';
 
+import * as resolveHelper from 'resolve.exports';
 import { dedent } from 'ts-dedent';
 
 import { interopRequireDefault } from './utils/interpret-require';
@@ -49,19 +50,26 @@ function resolvePathToMjs(filePath: string): string {
   return filePath;
 }
 
-function resolvePresetFunction<T = any>(
+async function resolvePresetFunction<T = any>(
   input: T[] | Function,
   presetOptions: any,
   storybookOptions: InterPresetOptions
-): T[] {
-  if (isFunction(input)) {
-    return [...input({ ...storybookOptions, ...presetOptions })];
-  }
-  if (Array.isArray(input)) {
-    return [...input];
-  }
+): Promise<T[]> {
+  try {
+    if (isFunction(input)) {
+      const result = await input({ ...storybookOptions, ...presetOptions });
+      console.log({ result });
+      return [...result];
+    }
+    if (Array.isArray(input)) {
+      return [...input];
+    }
 
-  return [];
+    return [];
+  } catch (e) {
+    console.log({ e, input });
+    throw e;
+  }
 }
 
 /**
@@ -81,11 +89,11 @@ function resolvePresetFunction<T = any>(
  *   =>  { type: 'presets', item: { name: '@storybook/addon-docs/preset', options } }
  */
 
-export const resolveAddonName = (
+export const resolveAddonName = async (
   configDir: string,
   name: string,
   options: any
-): CoreCommon_ResolvedAddonPreset | CoreCommon_ResolvedAddonVirtual | undefined => {
+): Promise<CoreCommon_ResolvedAddonPreset | CoreCommon_ResolvedAddonVirtual | undefined> => {
   const resolve = name.startsWith('/') ? safeResolve : safeResolveFrom.bind(null, configDir);
   const resolved = resolve(name);
 
@@ -122,7 +130,29 @@ export const resolveAddonName = (
   // Vite will be broken in such cases, because it does not process absolute paths,
   // and it will try to import from the bare import, breaking in pnp/pnpm.
   const absolutizeExport = (exportName: string, preferMJS: boolean) => {
-    const found = resolve(`${name}${exportName}`);
+    let combo = `${name}${exportName}`;
+    try {
+      const pkg = require(join(name, 'package.json'));
+      let subpath = resolveHelper.exports(pkg, exportName);
+
+      if (!subpath || subpath.length < 1) {
+        subpath = resolveHelper.exports(pkg, '.' + exportName);
+      }
+      if (!subpath || subpath.length < 1) {
+        subpath = resolveHelper.exports(pkg, '.' + exportName.replace(/^\//, ''));
+      }
+      if (subpath) {
+        combo = join(name, ...subpath);
+      }
+
+      if (!subpath || subpath.length < 1) {
+        combo = require.resolve(combo);
+      }
+    } catch (err) {
+      // failed = true;
+    }
+
+    const found = resolve(combo);
 
     if (found) {
       return preferMJS ? resolvePathToMjs(found) : found;
@@ -190,14 +220,14 @@ export const resolveAddonName = (
 
 const map =
   ({ configDir }: InterPresetOptions) =>
-  (item: any) => {
+  async (item: any) => {
     const options = isObject(item) ? item['options'] || undefined : undefined;
     const name = isObject(item) ? item['name'] : item;
 
     let resolved;
 
     try {
-      resolved = resolveAddonName(configDir, name, options);
+      resolved = await resolveAddonName(configDir, name, options);
     } catch (err) {
       logger.error(
         `Addon value should end in /manager or /preview or /register OR it should be a valid preset https://storybook.js.org/docs/react/addons/writing-presets/\n${item}`
@@ -269,19 +299,37 @@ export async function loadPreset(
         };
       }
 
-      const subPresets = resolvePresetFunction(
-        presetsInput,
-        presetOptions,
-        storybookOptions
-      ).filter(filter);
-      const subAddons = resolvePresetFunction(addonsInput, presetOptions, storybookOptions).filter(
-        filter
-      );
+      if (presetsInput && presetsInput.length > 1) {
+        console.log({ presetsInput });
+      }
+      if (addonsInput && addonsInput.length > 1) {
+        console.log({ addonsInput });
+      }
+
+      let subPresets: PresetConfig[] = [];
+      let subAddons: PresetConfig[] = [];
+
+      try {
+        subPresets = (
+          await resolvePresetFunction(presetsInput, presetOptions, storybookOptions)
+        ).filter(filter);
+      } catch (a) {
+        console.log({ a });
+      }
+      try {
+        subAddons = (
+          await resolvePresetFunction(addonsInput, presetOptions, storybookOptions)
+        ).filter(filter);
+      } catch (e) {
+        console.log({ e });
+      }
 
       return [
         ...(await loadPresets([...subPresets], level + 1, storybookOptions)),
         ...(await loadPresets(
-          [...subAddons.map(map(storybookOptions))].filter(Boolean) as PresetConfig[],
+          (await Promise.all([...subAddons.map(map(storybookOptions))])).filter(
+            Boolean
+          ) as PresetConfig[],
           level + 1,
           storybookOptions
         )),
@@ -415,7 +463,7 @@ export async function loadAllPresets(
 
   const presetsConfig: PresetConfig[] = [
     ...corePresets,
-    ...loadCustomPresets(options),
+    ...(await loadCustomPresets(options)),
     ...overridePresets,
   ];
 

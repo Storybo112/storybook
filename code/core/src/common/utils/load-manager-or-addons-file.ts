@@ -6,9 +6,9 @@ import { dedent } from 'ts-dedent';
 
 import { getInterpretedFile } from './interpret-files';
 
-export function loadManagerOrAddonsFile({ configDir }: { configDir: string }) {
-  const storybookCustomAddonsPath = getInterpretedFile(resolve(configDir, 'addons'));
-  const storybookCustomManagerPath = getInterpretedFile(resolve(configDir, 'manager'));
+export async function loadManagerOrAddonsFile({ configDir }: { configDir: string }) {
+  const storybookCustomAddonsPath = await getInterpretedFile(resolve(configDir, 'addons'));
+  const storybookCustomManagerPath = await getInterpretedFile(resolve(configDir, 'manager'));
 
   if (storybookCustomAddonsPath || storybookCustomManagerPath) {
     logger.info('=> Loading custom manager config');

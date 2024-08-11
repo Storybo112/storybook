@@ -4,9 +4,9 @@ import { dedent } from 'ts-dedent';
 
 import { getInterpretedFile } from './interpret-files';
 
-export function loadPreviewOrConfigFile({ configDir }: { configDir: string }) {
-  const storybookConfigPath = getInterpretedFile(resolve(configDir, 'config'));
-  const storybookPreviewPath = getInterpretedFile(resolve(configDir, 'preview'));
+export async function loadPreviewOrConfigFile({ configDir }: { configDir: string }) {
+  const storybookConfigPath = await getInterpretedFile(resolve(configDir, 'config'));
+  const storybookPreviewPath = await getInterpretedFile(resolve(configDir, 'preview'));
 
   if (storybookConfigPath && storybookPreviewPath) {
     throw new Error(dedent`

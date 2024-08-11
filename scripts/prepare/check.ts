@@ -49,7 +49,8 @@ function getTSProgramAndHost(fileNames: string[], options: ts.CompilerOptions) {
   const program = ts.createProgram({
     rootNames: fileNames,
     options: {
-      module: ts.ModuleKind.CommonJS,
+      module: ts.ModuleKind.ES2022,
+      moduleResolution: ts.ModuleResolutionKind.Bundler,
       ...options,
       declaration: false,
       noEmit: true,
