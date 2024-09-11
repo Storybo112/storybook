@@ -1,7 +1,13 @@
 // @vitest-environment happy-dom
 import { describe, expect, it, vi } from 'vitest';
 
-import { darkenColor as darken, getPreferredColorScheme, lightenColor as lighten } from '../utils';
+import {
+  darkenColor as darken,
+  getPreferredColorScheme,
+  lightenColor as lighten,
+  opacify,
+  transparentize,
+} from '../utils';
 
 describe('utils', () => {
   it('should apply polished when valid arguments are passed', () => {
@@ -76,6 +82,77 @@ describe('utils', () => {
     const result = lighten(color);
 
     expect(result).toEqual(color);
+  });
+
+  describe('darken', () => {
+    it('should accept amount parameter', () => {
+      const input = '#444';
+      const result = darken(0.2, input);
+
+      expect(result).not.toEqual(input);
+    });
+
+    it('should return unmodifed color when invalid color string is passed', () => {
+      const color = 'var(--foo)';
+
+      const result = darken(0.2, color);
+
+      expect(result).toEqual(color);
+    });
+  });
+
+  describe('lighten', () => {
+    it('should accept amount parameter', () => {
+      const input = '#444';
+
+      const result = lighten(0.1, input);
+
+      expect(result).not.toEqual(input);
+    });
+
+    it('should return unmodifed color when invalid color string is passed', () => {
+      const color = 'var(--bar)';
+
+      const result = lighten(0.1, color);
+
+      expect(result).toEqual(color);
+    });
+  });
+
+  describe('transparentize', () => {
+    it('should call function imported from polished', () => {
+      const input = '#fff';
+
+      const result = transparentize(0.1, input);
+
+      expect(result).not.toEqual(input);
+    });
+
+    it('should return unmodifed color when invalid color string is passed', () => {
+      const color = 'var(--baz)';
+
+      const result = transparentize(0.1, color);
+
+      expect(result).toEqual(color);
+    });
+  });
+
+  describe('opacify', () => {
+    it('should call function imported from polished', () => {
+      const input = '#fffa';
+
+      const result = opacify(0.1, input);
+
+      expect(result).not.toEqual(input);
+    });
+
+    it('should return unmodifed color when invalid color string is passed', () => {
+      const color = 'var(--qux)';
+
+      const result = opacify(0.1, color);
+
+      expect(result).toEqual(color);
+    });
   });
 
   describe('getPreferredColorScheme', () => {
