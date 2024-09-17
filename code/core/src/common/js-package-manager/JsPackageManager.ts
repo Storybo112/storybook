@@ -10,6 +10,7 @@ import invariant from 'tiny-invariant';
 import { dedent } from 'ts-dedent';
 
 import { HandledError } from '../utils/HandledError';
+import { paddedLog } from '../utils/log';
 import storybookPackagesVersions from '../versions';
 import type { PackageJson, PackageJsonWithDepsAndDevDeps } from './PackageJson';
 import type { InstallationMetadata } from './types';
@@ -115,7 +116,7 @@ export abstract class JsPackageManager {
 
   /** Install dependencies listed in `package.json` */
   public async installDependencies() {
-    logger.log('Installing dependencies...');
+    paddedLog('Installing dependencies...', 1);
     logger.log();
 
     try {
