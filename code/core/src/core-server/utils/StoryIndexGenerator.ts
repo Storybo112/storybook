@@ -413,6 +413,7 @@ export class StoryIndexGenerator {
         type: 'docs',
         tags,
         storiesImports: [],
+        headings: indexInputs.map((input) => input.name).filter(Boolean) as string[],
       });
     }
 
@@ -437,6 +438,8 @@ export class StoryIndexGenerator {
 
       const { analyze } = await import('@storybook/docs-mdx');
       const result = await analyze(content);
+
+      // console.log({ absolutePath, headings: result.headings });
 
       // Templates are not indexed
       if (result.isTemplate) {
@@ -522,6 +525,7 @@ export class StoryIndexGenerator {
         storiesImports: sortedDependencies.map((dep) => dep.entries[0].importPath),
         type: 'docs',
         tags,
+        headings: result.headings || [],
       };
       return docsEntry;
     } catch (err) {

@@ -508,6 +508,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "story",
               },
               "b--docs": {
+                "headings": [
+                  "Story One",
+                ],
                 "id": "b--docs",
                 "importPath": "./src/B.stories.ts",
                 "name": "docs",
@@ -570,6 +573,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "story",
               },
               "d--docs": {
+                "headings": [
+                  "Story One",
+                ],
                 "id": "d--docs",
                 "importPath": "./src/D.stories.jsx",
                 "name": "docs",
@@ -670,6 +676,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "story",
               },
               "h--docs": {
+                "headings": [
+                  "Story One",
+                ],
                 "id": "h--docs",
                 "importPath": "./src/H.stories.mjs",
                 "name": "docs",
@@ -917,6 +926,9 @@ describe('StoryIndexGenerator', () => {
           {
             "entries": {
               "b--docs": {
+                "headings": [
+                  "Story One",
+                ],
                 "id": "b--docs",
                 "importPath": "./src/B.stories.ts",
                 "name": "docs",
@@ -930,6 +942,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "docs",
               },
               "b--metaofnoname": {
+                "headings": [
+                  "Docs with of",
+                ],
                 "id": "b--metaofnoname",
                 "importPath": "./errors/MetaOfNoName.mdx",
                 "name": "MetaOfNoName",
@@ -982,6 +997,9 @@ describe('StoryIndexGenerator', () => {
           {
             "entries": {
               "b--docs": {
+                "headings": [
+                  "Story One",
+                ],
                 "id": "b--docs",
                 "importPath": "./src/B.stories.ts",
                 "name": "docs",
@@ -995,6 +1013,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "docs",
               },
               "b--name": {
+                "headings": [
+                  "Docs with of",
+                ],
                 "id": "b--name",
                 "importPath": "./errors/MetaOfName.mdx",
                 "name": "name",
@@ -1051,6 +1072,9 @@ describe('StoryIndexGenerator', () => {
           {
             "entries": {
               "a--docs": {
+                "headings": [
+                  "Docs with of",
+                ],
                 "id": "a--docs",
                 "importPath": "./errors/A.mdx",
                 "name": "docs",
@@ -1161,6 +1185,9 @@ describe('StoryIndexGenerator', () => {
           {
             "entries": {
               "duplicate-a--docs": {
+                "headings": [
+                  "Story One",
+                ],
                 "id": "duplicate-a--docs",
                 "importPath": "./duplicate/A.stories.js",
                 "name": "docs",
@@ -1240,6 +1267,9 @@ describe('StoryIndexGenerator', () => {
           {
             "entries": {
               "my-component-a--docs": {
+                "headings": [
+                  "Story One",
+                ],
                 "id": "my-component-a--docs",
                 "importPath": "./docs-id-generation/A.stories.jsx",
                 "name": "docs",
@@ -1282,6 +1312,9 @@ describe('StoryIndexGenerator', () => {
           {
             "entries": {
               "a--metaof": {
+                "headings": [
+                  "Docs with of",
+                ],
                 "id": "a--metaof",
                 "importPath": "./src/docs2/MetaOf.mdx",
                 "name": "MetaOf",
@@ -1299,6 +1332,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "docs",
               },
               "a--second-docs": {
+                "headings": [
+                  "Second Docs",
+                ],
                 "id": "a--second-docs",
                 "importPath": "./src/docs2/SecondMetaOf.mdx",
                 "name": "Second Docs",
@@ -1330,6 +1366,7 @@ describe('StoryIndexGenerator', () => {
                 "type": "story",
               },
               "componentreference--docs": {
+                "headings": [],
                 "id": "componentreference--docs",
                 "importPath": "./src/docs2/ComponentReference.mdx",
                 "name": "docs",
@@ -1343,6 +1380,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "docs",
               },
               "docs2-yabbadabbadooo--docs": {
+                "headings": [
+                  "Docs with title",
+                ],
                 "id": "docs2-yabbadabbadooo--docs",
                 "importPath": "./src/docs2/Title.mdx",
                 "name": "docs",
@@ -1356,6 +1396,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "docs",
               },
               "notitle--docs": {
+                "headings": [
+                  "Docs with no title",
+                ],
                 "id": "notitle--docs",
                 "importPath": "./src/docs2/NoTitle.mdx",
                 "name": "docs",
@@ -1417,6 +1460,9 @@ describe('StoryIndexGenerator', () => {
           {
             "entries": {
               "a--metaof": {
+                "headings": [
+                  "Docs with of",
+                ],
                 "id": "a--metaof",
                 "importPath": "./src/docs2/MetaOf.mdx",
                 "name": "MetaOf",
@@ -1434,6 +1480,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "docs",
               },
               "a--second-docs": {
+                "headings": [
+                  "Second Docs",
+                ],
                 "id": "a--second-docs",
                 "importPath": "./src/docs2/SecondMetaOf.mdx",
                 "name": "Second Docs",
@@ -1465,6 +1514,7 @@ describe('StoryIndexGenerator', () => {
                 "type": "story",
               },
               "componentreference--info": {
+                "headings": [],
                 "id": "componentreference--info",
                 "importPath": "./src/docs2/ComponentReference.mdx",
                 "name": "Info",
@@ -1478,6 +1528,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "docs",
               },
               "docs2-yabbadabbadooo--info": {
+                "headings": [
+                  "Docs with title",
+                ],
                 "id": "docs2-yabbadabbadooo--info",
                 "importPath": "./src/docs2/Title.mdx",
                 "name": "Info",
@@ -1491,6 +1544,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "docs",
               },
               "notitle--info": {
+                "headings": [
+                  "Docs with no title",
+                ],
                 "id": "notitle--info",
                 "importPath": "./src/docs2/NoTitle.mdx",
                 "name": "Info",
@@ -1551,6 +1607,9 @@ describe('StoryIndexGenerator', () => {
                 "type": "story",
               },
               "b--twostoryreferences": {
+                "headings": [
+                  "This file references two story files",
+                ],
                 "id": "b--twostoryreferences",
                 "importPath": "./complex/TwoStoryReferences.mdx",
                 "name": "TwoStoryReferences",
@@ -1592,6 +1651,9 @@ describe('StoryIndexGenerator', () => {
           {
             "entries": {
               "my-component-b--docs": {
+                "headings": [
+                  "Docs with of",
+                ],
                 "id": "my-component-b--docs",
                 "importPath": "./docs-id-generation/B.docs.mdx",
                 "name": "docs",
