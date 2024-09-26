@@ -6,7 +6,10 @@ import type { API_LoadedRefData, Addon_SidebarTopType } from '@storybook/core/ty
 
 import type { State } from '@storybook/core/manager-api';
 
+import { tint } from 'polished';
+
 import { MEDIA_DESKTOP_BREAKPOINT } from '../../constants';
+import { cssVar } from '../../utils/cssVar';
 import { Explorer } from './Explorer';
 import type { HeadingProps } from './Heading';
 import { Heading } from './Heading';
@@ -18,23 +21,30 @@ import { useLastViewed } from './useLastViewed';
 
 export const DEFAULT_REF_ID = 'storybook_internal';
 
-const Container = styled.nav(({ theme }) => ({
-  position: 'absolute',
-  zIndex: 1,
-  left: 0,
-  top: 0,
-  bottom: 0,
-  right: 0,
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  background: theme.background.content,
+const Container = styled.nav(() => {
+  const shouldTintBackground =
+    !cssVar('--sb-backgroundSidebar') &&
+    !cssVar('--sb-background') &&
+    cssVar('--sb-accent') !== '#029cfd';
 
-  [MEDIA_DESKTOP_BREAKPOINT]: {
-    background: theme.background.app,
-  },
-}));
+  const background = shouldTintBackground
+    ? tint(0.94, cssVar('--sb-accentSidebar') ?? cssVar('--sb-accent'))
+    : 'var(--sb-backgroundSidebar, var(--sb-background, var(--sb-default-backgroundSidebar)))';
+
+  return {
+    position: 'absolute',
+    zIndex: 1,
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    background,
+  };
+});
 
 const Top = styled(Spaced)({
   paddingLeft: 12,
