@@ -4,9 +4,9 @@ import type { StorybookConfig } from 'storybook/internal/types';
 
 import { mdxgfm } from './mdx-gfm';
 
-vi.mock('globby', () => ({
+vi.mock('tinyglobby', () => ({
   __esModule: true,
-  globby: vi.fn().mockResolvedValue(['a/fake/file.mdx']),
+  glob: vi.fn().mockResolvedValue(['a/fake/file.mdx']),
 }));
 
 const check = async ({
