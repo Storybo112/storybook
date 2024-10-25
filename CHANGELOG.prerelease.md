@@ -1,3 +1,8 @@
+## 8.4.0-beta.1
+
+- Addon Test: Error when addon interactions exists - [#29434](https://github.com/storybookjs/storybook/pull/29434), thanks @valentinpalkovic!
+- Maintenance: Fix broken and outdated documentation links - [#29412](https://github.com/storybookjs/storybook/pull/29412), thanks @jonniebigodes!
+
 ## 8.4.0-beta.0
 
 - Core: Add unified UI Testing Module - [#29241](https://github.com/storybookjs/storybook/pull/29241), thanks @yannbf!
