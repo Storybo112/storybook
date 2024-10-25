@@ -1,4 +1,4 @@
-import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import type { PresetProperty } from 'storybook/internal/types';
 
@@ -11,8 +11,8 @@ export const previewAnnotations: PresetProperty<'previewAnnotations'> = async (
 
   return result
     .concat(input)
-    .concat([join(__dirname, 'entry-preview.mjs')])
-    .concat(docsEnabled ? [join(__dirname, 'entry-preview-docs.mjs')] : []);
+    .concat(['@storybook/preact/entry-preview'])
+    .concat(docsEnabled ? ['@storybook/preact/entry-preview-docs'] : []);
 };
 
 /**

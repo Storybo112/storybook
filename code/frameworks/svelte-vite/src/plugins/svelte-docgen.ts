@@ -1,10 +1,12 @@
 import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { basename, relative } from 'node:path';
 
 import { logger } from 'storybook/internal/node-logger';
 
 import MagicString from 'magic-string';
-import { replace, typescript } from 'svelte-preprocess';
+import replace from 'svelte-preprocess/dist/processors/replace.js';
+import typescript from 'svelte-preprocess/dist/processors/typescript.js';
 import { preprocess } from 'svelte/compiler';
 import type {
   JSDocType,
@@ -16,6 +18,8 @@ import svelteDoc from 'sveltedoc-parser';
 import type { PluginOption } from 'vite';
 
 import { type Docgen, type Type, createDocgenCache, generateDocgen } from './generateDocgen';
+
+const require = createRequire(import.meta.url);
 
 /*
  * Patch sveltedoc-parser internal options.
